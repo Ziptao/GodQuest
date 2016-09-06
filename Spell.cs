@@ -16,6 +16,7 @@ public class Spell : MonoBehaviour {
 
 
     public GameObject target;
+    public GameObject owner;
    
 
 
@@ -38,40 +39,64 @@ public class Spell : MonoBehaviour {
     }
 
     void OnCollisionEnter2D(Collision2D other)
-    {       
-		
-		if (other.gameObject.tag == "Player" && other.gameObject.GetComponent<Player> () != null )
-		{            
-			other.gameObject.GetComponent<Player> ().TakeDamage (spellDamage);
-		} 
-		else if (other.gameObject.tag == "NPC" && other.gameObject.GetComponent<NPC> () != null )
-		{
-			other.gameObject.GetComponent<NPC>().TakeDamage(spellDamage);
-		}
-		if (other.gameObject.GetComponent<Debuffs> () != null)
-		{
+    {        
+        if (other.gameObject.tag == "Player")
+        {            
+            other.gameObject.GetComponent<Player>().TakeDamage(spellDamage);
+            if (dot == true)
+            {
+                other.gameObject.GetComponent<Debuffs>().DamageOverTime(spellDamage, dotDuration);
+            }
+            if (stun == true)
+            {
+                other.gameObject.GetComponent<Debuffs>().TimedStun(stunDuration);
+            }
+            if (slow == true)
+            {
+                other.gameObject.GetComponent<Debuffs>().TimedSlow();
+                
+            }
+            if(snare == true)
+            {
+                
+            }
 
-			if (dot == true)
-			{
-				other.gameObject.GetComponent<Debuffs>().DamageOverTime(spellDamage, dotDuration);
+            Destroy(this.gameObject);
+        }
 
-			}
-			if (stun == true)
-			{
-				other.gameObject.GetComponent<Debuffs>().TimedStun(stunDuration);
+        if (other.gameObject.tag == "NPC")
+        {
+            if(other.gameObject.GetComponent<NPC>() != null)
+            {
+                other.gameObject.GetComponent<NPC>().TakeDamage(spellDamage);
+                if (dot == true)
+                {
+                    other.gameObject.GetComponent<Debuffs>().DamageOverTime(spellDamage, dotDuration);                    
+                }
+                if (stun == true)
+                {
+                    other.gameObject.GetComponent<Debuffs>().TimedStun(stunDuration);                   
+                }
+                if (slow == true)
+                {
+                    other.gameObject.GetComponent<Debuffs>().TimedSlow();                    
+                }
+                if (snare == true)
+                {
+                    
+                }
 
-			}
-			if (slow == true)
-			{
-				other.gameObject.GetComponent<Debuffs>().TimedSlow();
+                Destroy(this.gameObject);
+            }            
+            
+        }
 
-			}
-			if(snare == true)
-			{
-
-			}
-
-			Destroy(this.gameObject);
-		}
+        /*
+        if (obj.tag == "Destructable")
+        {
+            other.GetComponent<Destructable>().TakeDamage(spellDamage);
+            Destroy(gameObject);
+        }
+        */
     }    
 }

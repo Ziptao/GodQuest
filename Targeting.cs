@@ -19,10 +19,17 @@ public class Targeting : MonoBehaviour {
             else if (Input.GetMouseButtonDown(1))
             {
                 sceneManager.GetComponent<Scene_Manager>().player.GetComponent<Player>().SetTarget(this.gameObject);
-                if(this.gameObject.GetComponent<NPC>().isMerchant == true)
+                if(this.gameObject.GetComponent<Character>().isAlive == false)
                 {
-                    //open shop window
-                }
+                    if (this.gameObject.GetComponent<Character>().isLootable == true)
+                    {
+                        float lootDistance = 2;
+                        if (Vector2.Distance(this.gameObject.transform.position, sceneManager.GetComponent<Scene_Manager>().player.GetComponent<Player>().transform.position) <= lootDistance)
+                        {
+                            this.gameObject.GetComponent<LootWindow>().ActivateWindow();
+                        }                        
+                    }
+                }             
             }
         }
         else

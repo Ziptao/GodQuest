@@ -30,12 +30,16 @@ public class Player : Character {
 	}
 
     sealed public override void Update()
-    {        
-        ResourceRegeneration();
-        CheckDebuffs();
-        Move();
-        Controls();
-        ChangeSprite();
+    {
+        if(isAlive == true)
+        {
+            ResourceRegeneration();
+            CheckDebuffs();
+            Move();
+            Controls();            
+            Die();
+            ChangeSprite();
+        }        
 	}
 
     void Move()
@@ -75,7 +79,8 @@ public class Player : Character {
                 print("Clearing Target");
                 target = null;
             }
-        }
+        }        
+
         if(IsStunned == false)
         {
             if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -120,24 +125,7 @@ public class Player : Character {
                     print("You are Stunned");
                 }                
             }
-        }
-        
-    }
-
-    public void CheckDebuffs()
-    {
-        if(IsStunned == true)
-        {
-            
-        }
-        if(IsSlowed == true)
-        {
-            MovementSpeed = BaseMovementSpeed / 2;
-        }
-        if(IsSnared == true)
-        {
-
-        }
+        }        
     }
 
     void Attack()
@@ -146,27 +134,30 @@ public class Player : Character {
         {
             Rigidbody2D spellInstance = Instantiate(spell, topSpellSpawner.transform.position, Quaternion.Euler(new Vector3(0, 0, 1))) as Rigidbody2D;
             spellInstance.GetComponent<Spell>().target = target;
+            spellInstance.GetComponent<Spell>().owner = this.gameObject;
             Physics2D.IgnoreCollision(spellInstance.GetComponent<Collider2D>(), this.gameObject.GetComponent<Collider2D>());
         }
         else if(facingDown == true)
         {
             Rigidbody2D spellInstance = Instantiate(spell, bottomSpellSpawner.transform.position, Quaternion.Euler(new Vector3(0, 0, 1))) as Rigidbody2D;
             spellInstance.GetComponent<Spell>().target = target;
+            spellInstance.GetComponent<Spell>().owner = this.gameObject;
             Physics2D.IgnoreCollision(spellInstance.GetComponent<Collider2D>(), this.gameObject.GetComponent<Collider2D>());
         }
         else if (facingLeft == true)
         {
             Rigidbody2D spellInstance = Instantiate(spell, leftSpellSpawner.transform.position, Quaternion.Euler(new Vector3(0, 0, 1))) as Rigidbody2D;
             spellInstance.GetComponent<Spell>().target = target;
+            spellInstance.GetComponent<Spell>().owner = this.gameObject;
             Physics2D.IgnoreCollision(spellInstance.GetComponent<Collider2D>(), this.gameObject.GetComponent<Collider2D>());
         }
         else if(facingRight == true)
         {
             Rigidbody2D spellInstance = Instantiate(spell, rightSpellSpawner.transform.position, Quaternion.Euler(new Vector3(0, 0, 1))) as Rigidbody2D;
             spellInstance.GetComponent<Spell>().target = target;
+            spellInstance.GetComponent<Spell>().owner = this.gameObject;
             Physics2D.IgnoreCollision(spellInstance.GetComponent<Collider2D>(), this.gameObject.GetComponent<Collider2D>());
-        }
-        
+        }        
     }
         
     void ChangeSprite()

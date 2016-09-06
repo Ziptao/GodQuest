@@ -7,10 +7,11 @@ public class NPC : Character {
     public GameObject target;
     public Vector2 spawnPosition;    
     public float chaseDistance;
+    public float minimumAttackDistance;
+    public float maximumAttackDistance;
     public bool returningToPosition;
 
-    public bool isMerchant;
-
+    public bool isMerchant;        
 
     
     void Start()
@@ -22,25 +23,27 @@ public class NPC : Character {
 
     sealed public override void Update()
     {
-        if (target != null && Vector2.Distance(spawnPosition, transform.position) < chaseDistance)
+        if(isAlive == true)
         {
-            MoveToEnemy();
-        }
-        else
-        {
-            MoveToSpawn();
-        }
-        ResourceRegeneration();
-        Die();
-    }
+            if (target != null && Vector2.Distance(spawnPosition, transform.position) < chaseDistance)
+            {
+                MoveToEnemy();
+                Attack();
+            }
+            else
+            {
+                MoveToSpawn();
+            }
+            ResourceRegeneration();
+            CheckDebuffs();
+            Die();
+        }        
+    }    
 
-    public void Die()
+    public void SetLoot()
     {
-        if (Health <= 0)
-        {
-            Destroy(this.gameObject);
-            //drop things
-        }
+        //set sprite to dead sprite
+        //set loot in loot window        
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -74,5 +77,14 @@ public class NPC : Character {
             returningToPosition = false;            
         }
     }
+
+    public void Attack()
+    {
+        if(Vector2.Distance(spawnPosition, transform.position) < minimumAttackDistance)
+        {
+            //attack
+        }
+    }
+
     
 }

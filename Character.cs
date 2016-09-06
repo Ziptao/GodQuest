@@ -5,11 +5,16 @@ public enum Faction_e
 {
     NEUTRAL, FRIENDLY, HOSTILE
 }
+public enum Race_e
+{
+    HUMAN, ELF, DWARF
+}
 
 public class Character : MonoBehaviour {
 
     //character miscellaneous
-    private Faction_e m_faction;
+    public Faction_e m_faction;
+    public Race_e m_race;    
     public string m_firstName;
     public string m_lastName;
 
@@ -29,20 +34,23 @@ public class Character : MonoBehaviour {
     public float m_movementSpeed;
     public float m_maxMovementSpeed = 10;
 
-    //spell effects
-    private bool m_isStunned = false;
-    private bool m_isSnared = false;
-    public bool m_isSlowed = false;
-
     //status effects
     public bool isAlive = true;
     public bool isBleeding;
     public bool isCasting;
-    public bool isSprinting;    
+    public bool isSprinting;
     public bool immuneToDamage;
     public bool immuneToStun;
     public bool immuneToSlow;
     public bool immuneToSnare;
+    public bool isLootable;
+
+    //spell effects
+    public bool m_isStunned;
+    public bool m_isSnared;
+    public bool m_isSlowed;
+
+        
     
 
 
@@ -89,6 +97,46 @@ public class Character : MonoBehaviour {
         }
     }
 
+    public void CheckDebuffs()
+    {
+        if (IsStunned == true)
+        {
+
+        }
+        if (IsSlowed == true)
+        {
+            m_movementSpeed = m_baseMovementSpeed / 2;
+        }
+        else if(IsSlowed == false)
+        {
+            m_movementSpeed = m_baseMovementSpeed;
+        }
+        if (IsSnared == true)
+        {
+
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (immuneToDamage == false)
+        {
+            Health -= damage;
+        }
+        else
+        {
+            print("Immune to Damage");
+        }
+    }
+
+    public void Die()
+    {
+        if(m_health <= 0)
+        {
+            isAlive = false;            
+        }
+    }
+
     public Faction_e Faction
     {
         get
@@ -99,6 +147,19 @@ public class Character : MonoBehaviour {
         set
         {
             m_faction = value;
+        }
+    }
+
+    public Race_e Race
+    {
+        get
+        {
+            return m_race;
+        }
+
+        set
+        {
+            m_race = value;
         }
     }
 
@@ -341,17 +402,5 @@ public class Character : MonoBehaviour {
         {            
             m_isSlowed = value;                      
         }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        if(immuneToDamage == false)
-        {
-            Health -= damage;
-        }
-        else
-        {
-            print("Immune to Damage");
-        }       
-    }           
+    }                  
 }

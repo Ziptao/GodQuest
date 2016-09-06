@@ -5,6 +5,7 @@ public class Debuffs : MonoBehaviour {
     
 
 
+    
     IEnumerator DamageOverTimeCoroutine(int damageAmount, int duration)
     {
         int amountDamaged = 0;
@@ -24,23 +25,18 @@ public class Debuffs : MonoBehaviour {
 
     IEnumerator TimedStunCoroutine(int duration)
     {
-        int timeStunned = 0;
-        while (timeStunned < duration)
-        {
-            gameObject.GetComponent<Character>().IsStunned = true;
-            timeStunned++;            
-            yield return new WaitForSeconds(1.0f);
-        }
+        yield return new WaitForSeconds(duration);
+        gameObject.GetComponent<Character>().IsStunned = false;
     }
 
     public void TimedStun(int stunTime)
     {
+        gameObject.GetComponent<Character>().IsStunned = true;
         StartCoroutine(TimedStunCoroutine(stunTime));
     }
 
     IEnumerator TimedSlowCoroutine()
-    {
-        print("Starting Coroutine");
+    {        
         yield return new WaitForSeconds(3);
         gameObject.GetComponent<Character>().IsSlowed = false;
     }
@@ -48,8 +44,7 @@ public class Debuffs : MonoBehaviour {
     public void TimedSlow()
     {
         gameObject.GetComponent<Character>().IsSlowed = true;
-        StartCoroutine(TimedSlowCoroutine());
-        print("Stopping Coroutine");
+        StartCoroutine(TimedSlowCoroutine());        
     }
 
     IEnumerator TimedSnareCoroutine(int duration)
